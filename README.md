@@ -11,7 +11,7 @@ The system now uses message passing, so I have some async-await stuff to handle 
 ## Getting it running
 This is in very early phases, but if you would like to try it out you can use the following steps:
 1. Clone the repo somewhere exciting like `~/documents/the-best-project-in-the-world`
-2. Take sure you have yarn or npm installed, whichever your heart desires
+2. Make sure you have yarn or npm installed, whichever your heart desires
 4. Skip the number 3
 5. In your terminal, navigate to `React swift webview/web_root/react-swift-webview`
 6. run `yarn run start` or `npm run start`
