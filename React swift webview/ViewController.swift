@@ -11,7 +11,6 @@ import WebKit
 
 class ViewController: NSViewController, WKScriptMessageHandler {
 
-//    var webView: WKWebView?
     @IBOutlet weak var webView: WKWebView!
 
     override func loadView() {
@@ -69,7 +68,7 @@ class ViewController: NSViewController, WKScriptMessageHandler {
     }
 
     func currentVersion() -> String {
-        return "'Swift iOS web hybrid template 1.0.0'";
+        return "'0.0.1'";
     }
     
     func getCurrentVersion(promiseId: String) {
