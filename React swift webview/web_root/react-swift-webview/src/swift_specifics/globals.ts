@@ -8,7 +8,7 @@ declare global {
 let promiseCount = 0;
 const promises = {};
 
-window.resolvePromise = function(promiseId: number, data, error) {
+window.resolvePromise = function(promiseId: number, data:any, error) {
   if (error) {
     return promises[promiseId].reject(data);
   }
@@ -19,8 +19,8 @@ window.resolvePromise = function(promiseId: number, data, error) {
 
 // window.addVersion = (version: string) => console.log(version);
 
-const swift = (swiftFunction: string): any => {
-  var promise = new Promise((resolve, reject) => {
+const swift = (swiftFunction: string): Promise<String> => {
+  var promise = new Promise<String>((resolve, reject) => {
     promiseCount++;
     promises[promiseCount] = { resolve, reject };
     try {
