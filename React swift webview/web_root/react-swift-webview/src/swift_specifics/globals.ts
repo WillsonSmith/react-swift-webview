@@ -1,16 +1,18 @@
 declare global {
   interface Window {
-    swift: any,
+    webkit: any,
     addVersion(version: string): any,
   }
 }
 
 window.addVersion = (version: string) => console.log(version);
 
-const swift = window.swift;
+const swift = (swiftFunction: string): void => {
+  window.webkit.messageHandlers.callbackHandler.postMessage({functionToRun: swiftFunction});
+};
 
-function getCurrentVersion(): string {
-  return swift.getCurrentVersion();
+function getCurrentVersion(): void {
+  swift('getCurrentVersion');
 }
 
 export { getCurrentVersion };
