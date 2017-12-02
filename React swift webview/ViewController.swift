@@ -43,35 +43,37 @@ class ViewController: NSViewController, WKScriptMessageHandler {
     func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
         if let messageBody:NSDictionary = message.body as? NSDictionary {
             let functionToRun = String(describing: messageBody.value(forKey: "functionToRun")!);
+            let promiseId = String(describing: messageBody.value(forKey: "promiseId" )!);
+
             switch(functionToRun) {
             case "getCurrentVersion":
-                getCurrentVersion();
+                getCurrentVersion(promiseId: promiseId);
             default:
                 return {}();
             }
         }
     }
 
-    func executeJavascript(_ functionToRun:String, argument:String?) {
-        var functionName:String;
-        var arg:String;
-        if ((argument) != nil) {
-            arg = argument!;
+    func executeJavascript(_ functionToRun:String, arguments:Array<String>?) {
+        var function:String;
+        var args:String;
+
+        if (arguments != nil) {
+            args = arguments!.joined(separator: ", ");
         } else {
-            arg = "";
+            args = "";
         }
 
-        functionName = "\(functionToRun)('\(arg)')";
-        self.webView!.evaluateJavaScript(functionName, completionHandler: handleJavascriptCompletion as? (Any?, Error?) -> Void);
+        function = "\(functionToRun)(\(args))";
+        self.webView!.evaluateJavaScript(function, completionHandler: handleJavascriptCompletion as? (Any?, Error?) -> Void);
     }
 
     func currentVersion() -> String {
-        return "Swift iOS web hybrid template 1.0.0";
+        return "'Swift iOS web hybrid template 1.0.0'";
     }
     
-    func getCurrentVersion() {
-//        return (currentVersion());
-        executeJavascript("addVersion", argument:currentVersion())
+    func getCurrentVersion(promiseId: String) {
+        executeJavascript("resolvePromise", arguments:[promiseId, currentVersion()])
     }
 
     func handleJavascriptCompletion(_ object:AnyObject?, error:NSError?) -> Void {

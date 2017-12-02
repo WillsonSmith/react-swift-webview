@@ -1,18 +1,41 @@
 declare global {
   interface Window {
     webkit: any,
-    addVersion(version: string): any,
+    resolvePromise(promiseId: number, data: any, error: any): any,
   }
 }
 
-window.addVersion = (version: string) => console.log(version);
+let promiseCount = 0;
+const promises = {};
 
-const swift = (swiftFunction: string): void => {
-  window.webkit.messageHandlers.callbackHandler.postMessage({functionToRun: swiftFunction});
+window.resolvePromise = function(promiseId: number, data, error) {
+  if (error) {
+    return promises[promiseId].reject(data);
+  }
+  promises[promiseId].resolve(data);
+  promises[promiseId] = null;
+  delete promises[promiseId];
 };
 
-function getCurrentVersion(): void {
-  swift('getCurrentVersion');
+// window.addVersion = (version: string) => console.log(version);
+
+const swift = (swiftFunction: string): any => {
+  var promise = new Promise((resolve, reject) => {
+    promiseCount++;
+    promises[promiseCount] = { resolve, reject };
+    try {
+      window.webkit.messageHandlers.callbackHandler.postMessage({
+        promiseId: promiseCount, functionToRun: swiftFunction
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  });
+  return promise;
+};
+
+function getCurrentVersion(): Promise<String> {
+  return swift('getCurrentVersion');
 }
 
 export { getCurrentVersion };
