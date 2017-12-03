@@ -43,10 +43,10 @@ class ViewController: NSViewController, WKScriptMessageHandler {
         if let messageBody:NSDictionary = message.body as? NSDictionary {
             let functionToRun = String(describing: messageBody.value(forKey: "functionToRun")!);
             let promiseId = String(describing: messageBody.value(forKey: "promiseId" )!);
-
+            let prefix = String(describing: messageBody.value(forKey: "prefix")!);
             switch(functionToRun) {
             case "getCurrentVersion":
-                getCurrentVersion(promiseId: promiseId);
+                getCurrentVersion(promiseId: promiseId, prefix: prefix);
             default:
                 return {}();
             }
@@ -67,12 +67,12 @@ class ViewController: NSViewController, WKScriptMessageHandler {
         self.webView!.evaluateJavaScript(function, completionHandler: handleJavascriptCompletion as? (Any?, Error?) -> Void);
     }
 
-    func currentVersion() -> String {
-        return "'0.0.1'";
+    func currentVersion(prefix: String?) -> String {
+        return "'\(prefix ?? "")0.0.1'";
     }
     
-    func getCurrentVersion(promiseId: String) {
-        executeJavascript("resolvePromise", arguments:[promiseId, currentVersion()])
+    func getCurrentVersion(promiseId: String, prefix: String) {
+        executeJavascript("resolvePromise", arguments:[promiseId, currentVersion(prefix: prefix)])
     }
 
     func handleJavascriptCompletion(_ object:AnyObject?, error:NSError?) -> Void {

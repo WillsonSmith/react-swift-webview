@@ -24,9 +24,14 @@ const swift = (swiftFunction: string, namedArguments:any = {}): Promise<String> 
     promiseCount++;
     promises[promiseCount] = { resolve, reject };
     try {
-      window.webkit.messageHandlers.callbackHandler.postMessage({
-        promiseId: promiseCount, functionToRun: swiftFunction
-      });
+      window.webkit.messageHandlers.callbackHandler.postMessage(
+        Object.assign(
+          {
+            promiseId: promiseCount, functionToRun: swiftFunction
+          },
+          namedArguments,
+        )
+      );
     } catch (error) {
       console.log(error);
     }
@@ -37,7 +42,7 @@ const swift = (swiftFunction: string, namedArguments:any = {}): Promise<String> 
 function getCurrentVersion(): Promise<String> {
   // to add arguments -- swift('getCurrentVersion', {key: value})
   // accessed the same way promiseId is accessed
-  return swift('getCurrentVersion');
+  return swift('getCurrentVersion', {prefix: 'React-swift-webview '});
 }
 
 export { getCurrentVersion };
