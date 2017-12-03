@@ -33,8 +33,8 @@ class ViewController: NSViewController, WKScriptMessageHandler {
         self.webView?.configuration.preferences.setValue(true, forKey: "developerExtrasEnabled")
 
 
-        // let url = Bundle.main.url(forResource: "index", withExtension:"html");
-        // self.webView!.loadFileURL(url!, allowingReadAccessTo: url!);
+//        let url = Bundle.main.url(forResource: "index", withExtension:"html", subdirectory: "react-swift-webview/build");
+//        self.webView!.loadFileURL(url!, allowingReadAccessTo: url!);
         let url = NSURL(string: "http://localhost:3000")! as URL;
         self.webView.load(URLRequest(url: url));
     }
