@@ -19,8 +19,8 @@ window.resolvePromise = function(promiseId: number, data:any, error) {
 
 // window.addVersion = (version: string) => console.log(version);
 
-const swift = (swiftFunction: string, namedArguments:any = {}): Promise<String> => {
-  var promise = new Promise<String>((resolve, reject) => {
+const swift = (swiftFunction: string, namedArguments:any = {}): Promise<string> => {
+  var promise = new Promise<string>((resolve, reject) => {
     promiseCount++;
     promises[promiseCount] = { resolve, reject };
     try {
@@ -39,7 +39,7 @@ const swift = (swiftFunction: string, namedArguments:any = {}): Promise<String> 
   return promise;
 };
 
-function getCurrentVersion(): Promise<String> {
+function getCurrentVersion(): Promise<string> {
   // to add arguments -- swift('getCurrentVersion', {key: value})
   // accessed the same way promiseId is accessed
   return swift('getCurrentVersion', {prefix: 'React-swift-webview '});
