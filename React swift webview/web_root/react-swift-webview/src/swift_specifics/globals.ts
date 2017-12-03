@@ -1,14 +1,26 @@
+interface CallbackHandler {
+  postMessage(message: object): void;
+}
+
+interface MessageHandlers {
+  callbackHandler: CallbackHandler;
+}
+
+interface Webkit {
+  messageHandlers: MessageHandlers;
+}
+
 declare global {
   interface Window {
-    webkit: any,
-    resolvePromise(promiseId: number, data: any, error: any): any,
+    webkit: Webkit;
+    resolvePromise(promiseId: number, data: any, error: any): void;
   }
 }
 
-let promiseCount = 0;
-const promises = {};
+let promiseCount: number = 0;
+const promises: object = {};
 
-window.resolvePromise = function(promiseId: number, data:any, error) {
+window.resolvePromise = function(promiseId: number, data:any, error:any): void {
   if (error) {
     return promises[promiseId].reject(data);
   }
@@ -17,9 +29,7 @@ window.resolvePromise = function(promiseId: number, data:any, error) {
   delete promises[promiseId];
 };
 
-// window.addVersion = (version: string) => console.log(version);
-
-const swift = (swiftFunction: string, namedArguments:any = {}): Promise<string> => {
+const callSwift = (swiftFunction: string, namedArguments:any = {}): Promise<string> => {
   var promise = new Promise<string>((resolve, reject) => {
     promiseCount++;
     promises[promiseCount] = { resolve, reject };
@@ -42,7 +52,7 @@ const swift = (swiftFunction: string, namedArguments:any = {}): Promise<string> 
 function getCurrentVersion(): Promise<string> {
   // to add arguments -- swift('getCurrentVersion', {key: value})
   // accessed the same way promiseId is accessed
-  return swift('getCurrentVersion', {prefix: 'React-swift-webview '});
+  return callSwift('getCurrentVersion', {prefix: 'React-swift-webview '});
 }
 
 export { getCurrentVersion };
